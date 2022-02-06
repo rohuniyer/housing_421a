@@ -177,7 +177,7 @@
       }
       const feature = features[0];
 
-      // Use this to add anything to side bar
+    //   // Use this to add anything to side bar
       document.getElementById('details').innerHTML = `<h3>Address:</h3>
         <h5>${feature.properties.ADDRESS}</h5>
 
@@ -230,64 +230,7 @@
         </tr>
       </table>
           `
-
-    //   const popup = new mapboxgl.Popup({ offset: [0, -15] })
-    //   .setLngLat(feature.geometry.coordinates)
-    //   .setHTML(
-    //     `<h3>${feature.properties.ADDRESS}</h3>
-    //     <p><h4>Rent Stabilized Units By Year:</h4></p>
-    //     <table>
-    //     <tr>
-    //       <th>Year</th>
-    //       <th>Rent Stabilized Units</th> 
-    //     </tr>
-    //     <tr>
-    //       <td>2021</td>
-    //       <td>${norm_formatter.format(feature.properties.Units_2021)}</td> 
-    //     </tr>
-    //     <tr>
-    //       <td>2020</td>
-    //       <td>${norm_formatter.format(feature.properties.Units_2020)}</td> 
-    //     </tr>
-    //     <tr>
-    //       <td>2019</td>
-    //       <td>${norm_formatter.format(feature.properties.Units_2019)}</td> 
-    //     </tr>
-    //   </table>
-    //     <p><h4>Tax Exemptions in 2019:</h4></p>
-        
-        
-    //     <table>
-    //     <tr> 
-    //     </tr>
-    //     <tr>
-    //       <td>Assessed Value</td>
-    //       <td>${curr_formatter.format(feature.properties['Assessed Value Total'])}</td> 
-    //     </tr>
-    //     <tr>
-    //       <td>421A Exempted Value</td>
-    //       <td>${curr_formatter.format(feature.properties['Exempted Value Total'])}</td> 
-    //     </tr>
-    //     <tr>
-    //       <td>New Taxable Value</td>
-    //       <td>${curr_formatter.format(feature.properties['Taxable Value'])}</td> 
-    //     </tr>
-    //     <tr>
-    //       <td>Total Paid Taxes</td>
-    //       <td>${curr_formatter.format(feature.properties['Paid Taxes'])}</td> 
-    //     </tr>
-    //     <tr>
-    //       <td>Effective Tax Rate</td>
-    //       <td>${norm_formatter.format(100*((feature.properties['Paid Taxes'])/(feature.properties['Assessed Value Total'])))}%</td> 
-    //     </tr>
-    //   </table>
-    //       `
-    //     )
-        .addTo(map);
     });
-
-    
-
 
 
     </script>
