@@ -17,11 +17,62 @@
         bottom: 0; 
         width: 100%; 
       }
+      table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 4px;
+      }
+
+      tr:nth-child(even) {
+        background-color: #dddddd;
+      } 
+      .map-overlay {
+        position: relative;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 25%;
+        background: rgb(176, 176, 192);
+        margin-right: 0px;
+        font-family: Arial, sans-serif;
+        overflow: auto;
+        border-radius: 3px;
+        }
+
+      #details {
+        padding: 10px;
+        box-shadow: 0 1px 2px rgba(183, 178, 194, 0.267);
+        line-height: 18px;
+        height: 100%;
+        margin-bottom: 40px;
+        width: 320px;
+      }
+
+      .legend-key {
+        display: inline-block;
+        border-radius: 20%;
+        width: 10px;
+        height: 10px;
+        margin-right: 5px;
+      }
 
     </style>
   </head>
   <body>
     <div id='map'></div>
+    <div class="map-overlay" id="sidebar">
+      <div id="title">
+        <h1> 421A Properties NYC </h1>
+        <p style = "font-size:15px;"> <i>Click on properties for details </i></p>
+      </div>
+      <div id="details"></div>
+    </div>
     <script>
     // The value for 'accessToken' begins with 'pk...'
     mapboxgl.accessToken = 'pk.eyJ1Ijoicm9odW5peWVyIiwiYSI6ImNrMXpmejl0NDB4b28zbm11ZHVkeG5sOTAifQ.wiAU-uh5bnCNI71zRYta8w'; 
@@ -34,6 +85,11 @@
     });
 
 
+    // create legend
+    const legend = document.getElementById('legend');
+
+
+
     var curr_formatter = new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
@@ -44,6 +100,191 @@
     });
 
     var norm_formatter = new Intl.NumberFormat('en-US')
+
+    map.on('load', (event) => {
+      // If the user clicked on one of your markers, get its information.
+      const features = map.queryRenderedFeatures(event.point, {
+        layers: ['data-driven-circles'] // replace with your layer name
+      });
+      if (!features.length) {
+        return;
+      }
+      const feature = features[0];
+
+    //   // Use this to add anything to side bar
+      document.getElementById('details').innerHTML = `<h3>Address:</h3>
+        <h5>${feature.properties.ADDRESS}</h5>
+
+        <h3> Owner: </h3>
+        <h5> ${feature.properties.Owner} </h5>
+        <p><h4>Rent Stabilized Units By Year:</h4></p>
+        <table>
+        <tr>
+          <th>Year</th>
+          <th>Rent Stabilized Units</th> 
+        </tr>
+        <tr>
+          <td>2021</td>
+          <td>${norm_formatter.format(feature.properties.Units_2021)}</td> 
+        </tr>
+        <tr>
+          <td>2020</td>
+          <td>${norm_formatter.format(feature.properties.Units_2020)}</td> 
+        </tr>
+        <tr>
+          <td>2019</td>
+          <td>${norm_formatter.format(feature.properties.Units_2019)}</td> 
+        </tr>
+      </table>
+        <p><h4>Tax Exemptions in 2019:</h4></p>
+        
+        
+        <table>
+        <tr> 
+        </tr>
+        <tr>
+          <td>Assessed Value</td>
+          <td>${curr_formatter.format(feature.properties['Assessed Value Total'])}</td> 
+        </tr>
+        <tr>
+          <td>421A Exempted Value</td>
+          <td>${curr_formatter.format(feature.properties['Exempted Value Total'])}</td> 
+        </tr>
+        <tr>
+          <td>New Taxable Value</td>
+          <td>${curr_formatter.format(feature.properties['Taxable Value'])}</td> 
+        </tr>
+        <tr>
+          <td>Total Paid Taxes</td>
+          <td>${curr_formatter.format(feature.properties['Paid Taxes'])}</td> 
+        </tr>
+        <tr>
+          <td>Effective Tax Rate</td>
+          <td>${norm_formatter.format(100*((feature.properties['Paid Taxes'])/(feature.properties['Assessed Value Total'])))}%</td> 
+        </tr>
+      </table>
+          `
+    });
+
+
+    map.on('click', (event) => {
+      // If the user clicked on one of your markers, get its information.
+      const features = map.queryRenderedFeatures(event.point, {
+        layers: ['data-driven-circles'] // replace with your layer name
+      });
+      if (!features.length) {
+        return;
+      }
+      const feature = features[0];
+
+      // Use this to add anything to side bar
+      document.getElementById('details').innerHTML = `<h3>Address:</h3>
+        <h5>${feature.properties.ADDRESS}</h5>
+
+        <h3> Owner: </h3>
+        <h5> ${feature.properties.Owner} </h5>
+        <p><h4>Rent Stabilized Units By Year:</h4></p>
+        <table>
+        <tr>
+          <th>Year</th>
+          <th>Rent Stabilized Units</th> 
+        </tr>
+        <tr>
+          <td>2021</td>
+          <td>${norm_formatter.format(feature.properties.Units_2021)}</td> 
+        </tr>
+        <tr>
+          <td>2020</td>
+          <td>${norm_formatter.format(feature.properties.Units_2020)}</td> 
+        </tr>
+        <tr>
+          <td>2019</td>
+          <td>${norm_formatter.format(feature.properties.Units_2019)}</td> 
+        </tr>
+      </table>
+        <p><h4>Tax Exemptions in 2019:</h4></p>
+        
+        
+        <table>
+        <tr> 
+        </tr>
+        <tr>
+          <td>Assessed Value</td>
+          <td>${curr_formatter.format(feature.properties['Assessed Value Total'])}</td> 
+        </tr>
+        <tr>
+          <td>421A Exempted Value</td>
+          <td>${curr_formatter.format(feature.properties['Exempted Value Total'])}</td> 
+        </tr>
+        <tr>
+          <td>New Taxable Value</td>
+          <td>${curr_formatter.format(feature.properties['Taxable Value'])}</td> 
+        </tr>
+        <tr>
+          <td>Total Paid Taxes</td>
+          <td>${curr_formatter.format(feature.properties['Paid Taxes'])}</td> 
+        </tr>
+        <tr>
+          <td>Effective Tax Rate</td>
+          <td>${norm_formatter.format(100*((feature.properties['Paid Taxes'])/(feature.properties['Assessed Value Total'])))}%</td> 
+        </tr>
+      </table>
+          `
+
+    //   const popup = new mapboxgl.Popup({ offset: [0, -15] })
+    //   .setLngLat(feature.geometry.coordinates)
+    //   .setHTML(
+    //     `<h3>${feature.properties.ADDRESS}</h3>
+    //     <p><h4>Rent Stabilized Units By Year:</h4></p>
+    //     <table>
+    //     <tr>
+    //       <th>Year</th>
+    //       <th>Rent Stabilized Units</th> 
+    //     </tr>
+    //     <tr>
+    //       <td>2021</td>
+    //       <td>${norm_formatter.format(feature.properties.Units_2021)}</td> 
+    //     </tr>
+    //     <tr>
+    //       <td>2020</td>
+    //       <td>${norm_formatter.format(feature.properties.Units_2020)}</td> 
+    //     </tr>
+    //     <tr>
+    //       <td>2019</td>
+    //       <td>${norm_formatter.format(feature.properties.Units_2019)}</td> 
+    //     </tr>
+    //   </table>
+    //     <p><h4>Tax Exemptions in 2019:</h4></p>
+        
+        
+    //     <table>
+    //     <tr> 
+    //     </tr>
+    //     <tr>
+    //       <td>Assessed Value</td>
+    //       <td>${curr_formatter.format(feature.properties['Assessed Value Total'])}</td> 
+    //     </tr>
+    //     <tr>
+    //       <td>421A Exempted Value</td>
+    //       <td>${curr_formatter.format(feature.properties['Exempted Value Total'])}</td> 
+    //     </tr>
+    //     <tr>
+    //       <td>New Taxable Value</td>
+    //       <td>${curr_formatter.format(feature.properties['Taxable Value'])}</td> 
+    //     </tr>
+    //     <tr>
+    //       <td>Total Paid Taxes</td>
+    //       <td>${curr_formatter.format(feature.properties['Paid Taxes'])}</td> 
+    //     </tr>
+    //     <tr>
+    //       <td>Effective Tax Rate</td>
+    //       <td>${norm_formatter.format(100*((feature.properties['Paid Taxes'])/(feature.properties['Assessed Value Total'])))}%</td> 
+    //     </tr>
+    //   </table>
+    //       `
+    //     )
+        .addTo(map);
+    });
 
     
 
