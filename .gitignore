@@ -1,0 +1,22 @@
+#ignore all csvs
+*.csv
+
+#ignore env file
+.env
+
+#ignore word and pdf documents
+*.docx
+*.pdf
+
+
+#ignore archive
+archive/**
+
+#ignore notebook checkpoints (if any)
+.ipynb_checkpoints/**
+
+#ignore maps folder. Only keep index.html
+maps/**
+
+#ignore data folder
+data/**
